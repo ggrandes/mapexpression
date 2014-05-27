@@ -42,7 +42,7 @@ public class MapExpression {
 	private final StringBuilder buffer = new StringBuilder();
 
 	/**
-	 * Create Map Expression without evaluate
+	 * Create Map Expression without evaluate and SystemProperties as PostMapper
 	 * 
 	 * @param expression to map
 	 * @see #MapExpression(String, boolean)
@@ -52,7 +52,7 @@ public class MapExpression {
 	}
 
 	/**
-	 * Create Map Expression
+	 * Create Map Expression with SystemProperties and Map as PostMappers
 	 * 
 	 * @param expression to map
 	 * @param postMap map for parameters
