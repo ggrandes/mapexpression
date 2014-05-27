@@ -43,7 +43,7 @@ public class Example {
 
 ## MAVEN
 
-Add the Figaro maven repository location to your pom.xml: 
+Add the maven repository location to your pom.xml: 
 
     <repositories>
         <repository>
@@ -52,7 +52,7 @@ Add the Figaro maven repository location to your pom.xml:
         </repository>
     </repositories>
 
-Add the Figaro dependency to your pom.xml:
+Add the dependency to your pom.xml:
 
     <dependency>
         <groupId>org.infra</groupId>
