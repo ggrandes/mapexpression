@@ -37,7 +37,7 @@ public class Example {
 }
 ```
 
-* More examples in [Example package](https://github.com/ggrandes/mapexpression/tree/master/src/main/java/org/mapexpression/example/)
+* More examples in [Example package](https://github.com/ggrandes/mapexpression/tree/master/src/main/java/org/infra/mapexpression/example/)
 
 ---
 
