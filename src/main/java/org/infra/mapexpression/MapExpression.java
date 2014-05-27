@@ -179,7 +179,7 @@ public class MapExpression {
 	}
 
 	/**
-	 * Get previus evaluated expression
+	 * Get previous evaluated expression
 	 * 
 	 * @return evaluated expression
 	 * @see #eval()
