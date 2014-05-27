@@ -21,11 +21,12 @@ public class Example {
 		final String TEST_TEXT = "Hi ${user.name}, you are ${state}!!";
 		final HashMap<String, String> map = new HashMap<String, String>();
 		map.put("state", "lucky");
+		MapExpression m;
 		// Shot
-		MapExpression m = new MapExpression(TEST_TEXT, map, true);
+		m = new MapExpression(TEST_TEXT, map, true);
 		System.out.println(m.get());
 		// Fluent
-		MapExpression m = new MapExpression();
+		m = new MapExpression();
 		m.setExpression(TEST_TEXT) //
 				.setPreMapper(SystemPropertyMapper.getInstance()) //
 				.setPostMapper(new MapMapper(map)) //
