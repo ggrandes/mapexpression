@@ -55,6 +55,20 @@ public class MapExpression {
 	 * Create Map Expression
 	 * 
 	 * @param expression to map
+	 * @param postMap map for parameters
+	 * @param evalInit
+	 * @throws InvalidExpression
+	 */
+	public MapExpression(final String expression, final Map<String, String> postMap, final boolean evalInit)
+			throws InvalidExpression {
+		this(expression, null, new MultiMapper().add(new MapMapper(postMap)).add(
+				SystemPropertyMapper.getInstance()), evalInit);
+	}
+
+	/**
+	 * Create Map Expression
+	 * 
+	 * @param expression to map
 	 * @param preMapper mapper for parameters
 	 * @param postMapper mapper for parameters
 	 * @param evalInit false to skip evaluation on creation
@@ -69,20 +83,6 @@ public class MapExpression {
 		parseExpression(expression);
 		if (evalInit)
 			eval();
-	}
-
-	/**
-	 * Create Map Expression
-	 * 
-	 * @param expression to map
-	 * @param postMap map for parameters
-	 * @param evalInit
-	 * @throws InvalidExpression
-	 */
-	public MapExpression(final String expression, final Map<String, String> postMap, final boolean evalInit)
-			throws InvalidExpression {
-		this(expression, null, new MultiMapper().add(new MapMapper(postMap)).add(
-				SystemPropertyMapper.getInstance()), evalInit);
 	}
 
 	/**
@@ -104,6 +104,7 @@ public class MapExpression {
 	 * 
 	 * @throws InvalidExpression
 	 * @see #get()
+	 * @threadSafe false
 	 */
 	public MapExpression eval() throws InvalidExpression {
 		buffer.setLength(0);
