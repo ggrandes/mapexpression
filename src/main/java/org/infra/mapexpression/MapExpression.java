@@ -14,6 +14,11 @@
  */
 package org.infra.mapexpression;
 
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.PrintStream;
+import java.io.PrintWriter;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -89,24 +94,92 @@ public class MapExpression {
 		this.postMapper = postMapper;
 	}
 
+	private final String evalMapToken(final int token) throws InvalidExpression {
+		final Token tok = tokens.get(token);
+		return tok.isString ? tok.token : mapTokenPost(tok.token);
+	}
+
 	/**
 	 * Force reevaluate expression (if system property is changed after MapExpression was created)
 	 * 
 	 * @throws InvalidExpression
+	 * @see #get()
 	 */
 	public MapExpression eval() throws InvalidExpression {
 		buffer.setLength(0);
 		final int len = tokens.size();
 		for (int i = 0; i < len; i++) {
-			final Token tok = tokens.get(i);
-			buffer.append(tok.isString ? tok.token : mapTokenPost(tok.token));
+			buffer.append(evalMapToken(i));
 		}
 		mapped = buffer.toString();
 		return this;
 	}
 
 	/**
-	 * Get mapped expression
+	 * Evaluate expression and write to OutputStream using specified Charset
+	 * 
+	 * @param out
+	 * @param charset
+	 * @return
+	 * @throws InvalidExpression
+	 * @throws IOException
+	 */
+	public MapExpression eval(final OutputStream out, final Charset charset) throws InvalidExpression,
+			IOException {
+		final int len = tokens.size();
+		for (int i = 0; i < len; i++) {
+			out.write(evalMapToken(i).getBytes(charset));
+		}
+		return this;
+	}
+
+	/**
+	 * Evaluate expression and write to PrintWriter
+	 * 
+	 * @param out
+	 * @return
+	 * @throws InvalidExpression
+	 */
+	public MapExpression eval(final PrintWriter out) throws InvalidExpression {
+		final int len = tokens.size();
+		for (int i = 0; i < len; i++) {
+			out.print(evalMapToken(i));
+		}
+		return this;
+	}
+
+	/**
+	 * Evaluate expression and write to PrintStream
+	 * 
+	 * @param out
+	 * @return
+	 * @throws InvalidExpression
+	 */
+	public MapExpression eval(final PrintStream out) throws InvalidExpression {
+		final int len = tokens.size();
+		for (int i = 0; i < len; i++) {
+			out.print(evalMapToken(i));
+		}
+		return this;
+	}
+
+	/**
+	 * Evaluate expression and write to StringBuilder
+	 * 
+	 * @param out
+	 * @return
+	 * @throws InvalidExpression
+	 */
+	public MapExpression eval(final StringBuilder out) throws InvalidExpression {
+		final int len = tokens.size();
+		for (int i = 0; i < len; i++) {
+			out.append(evalMapToken(i));
+		}
+		return this;
+	}
+
+	/**
+	 * Get previus evaluated expression
 	 * 
 	 * @return evaluated expression
 	 * @see #eval()
