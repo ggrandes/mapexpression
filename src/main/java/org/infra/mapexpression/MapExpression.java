@@ -34,12 +34,19 @@ import org.infra.mapexpression.mapper.SystemPropertyMapper;
  *       Expression Eval (System Property)</a>
  */
 public class MapExpression {
-	public final String expression;
+	private String expression;
 	private String mapped;
 	private Mapper preMapper = null;
 	private Mapper postMapper = null;
 	private final ArrayList<Token> tokens = new ArrayList<Token>();
 	private final StringBuilder buffer = new StringBuilder();
+
+	/**
+	 * Create Empty Map Expression, no expression, no mappers
+	 */
+	public MapExpression() throws InvalidExpression {
+		this(null, null, null, false);
+	}
 
 	/**
 	 * Create Map Expression without evaluate and SystemProperties as PostMapper
@@ -80,18 +87,54 @@ public class MapExpression {
 		this.expression = expression;
 		this.preMapper = preMapper;
 		this.postMapper = postMapper;
-		parseExpression(expression);
-		if (evalInit)
-			eval();
+		if (expression != null) {
+			parseExpression();
+			if (evalInit)
+				eval();
+		}
+	}
+
+	/**
+	 * Get Current Expression
+	 * 
+	 * @return expression
+	 */
+	public String getExpression() {
+		return expression;
+	}
+
+	/**
+	 * Set new Expression
+	 * 
+	 * @param expression to parse
+	 * @return
+	 * @see #parseExpression()
+	 */
+	public MapExpression setExpression(final String expression) {
+		this.expression = expression;
+		return this;
+	}
+
+	/**
+	 * Set pre mapper for parameters
+	 * 
+	 * @param postMapper
+	 * @return
+	 */
+	public MapExpression setPreMapper(final Mapper preMapper) {
+		this.preMapper = preMapper;
+		return this;
 	}
 
 	/**
 	 * Set post mapper for parameters
 	 * 
 	 * @param postMapper
+	 * @return
 	 */
-	public void setPostMapper(final Mapper postMapper) {
+	public MapExpression setPostMapper(final Mapper postMapper) {
 		this.postMapper = postMapper;
+		return this;
 	}
 
 	private final String evalMapToken(final int token) throws InvalidExpression {
@@ -100,7 +143,8 @@ public class MapExpression {
 	}
 
 	/**
-	 * Force reevaluate expression (if system property is changed after MapExpression was created)
+	 * Force reevaluate expression (if system property is changed after MapExpression was created) and store
+	 * for {@link #get()}
 	 * 
 	 * @throws InvalidExpression
 	 * @see #get()
@@ -180,7 +224,7 @@ public class MapExpression {
 	}
 
 	/**
-	 * Get previous evaluated expression
+	 * Get previous evaluated expression with {@link #eval()}
 	 * 
 	 * @return evaluated expression
 	 * @see #eval()
@@ -190,17 +234,17 @@ public class MapExpression {
 	}
 
 	/**
-	 * Parse input expression
+	 * Parse expression
 	 * 
-	 * @param expression
+	 * @return
 	 * @throws InvalidExpression if expression is wrong
 	 */
-	void parseExpression(final String expression) throws InvalidExpression {
+	public MapExpression parseExpression() throws InvalidExpression {
 		if (expression == null)
 			throw new IllegalArgumentException();
-		tokens.clear();
 		if (expression.isEmpty())
-			return;
+			return this;
+		tokens.clear();
 		// Find all ${tag}
 		final int len = expression.length();
 		int last = 0;
@@ -227,6 +271,7 @@ public class MapExpression {
 		}
 		if (last < len)
 			tokens.add(new Token(expression.substring(last, len), true));
+		return this;
 	}
 
 	/**
@@ -236,11 +281,13 @@ public class MapExpression {
 	 * @return value or name if not found
 	 * @throws InvalidExpression if expression is wrong
 	 */
-	String mapTokenPre(final String name) throws InvalidExpression {
+	private final String mapTokenPre(final String name) throws InvalidExpression {
 		if (name.isEmpty())
 			throw new InvalidExpression("Invalid name (empty)", 0);
 		if (preMapper != null) {
-			return preMapper.map(name);
+			final String value = preMapper.map(name);
+			if (value != null)
+				return value;
 		}
 		return name;
 	}
@@ -252,11 +299,13 @@ public class MapExpression {
 	 * @return value or name if not found
 	 * @throws InvalidExpression if expression is wrong
 	 */
-	String mapTokenPost(final String name) throws InvalidExpression {
+	private final String mapTokenPost(final String name) throws InvalidExpression {
 		if (name.isEmpty())
 			throw new InvalidExpression("Invalid name (empty)", 0);
 		if (postMapper != null) {
-			return postMapper.map(name);
+			final String value = postMapper.map(name);
+			if (value != null)
+				return value;
 		}
 		return name;
 	}
@@ -273,6 +322,10 @@ public class MapExpression {
 		public Token(final String token, final boolean isToken) {
 			this.token = token;
 			this.isString = isToken;
+		}
+
+		public String toString() {
+			return (isString ? "string=<" : "token=<") + token + ">";
 		}
 	}
 }
