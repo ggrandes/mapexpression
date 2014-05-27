@@ -35,9 +35,11 @@ import org.infra.mapexpression.mapper.SystemPropertyMapper;
  */
 public class MapExpression {
 	private String expression;
-	private String mapped;
+	private String evaled;
 	private Mapper preMapper = null;
 	private Mapper postMapper = null;
+	private char[] beginToken = "${".toCharArray();
+	private char[] endToken = "}".toCharArray();
 	private final ArrayList<Token> tokens = new ArrayList<Token>();
 	private final StringBuilder buffer = new StringBuilder();
 
@@ -88,7 +90,7 @@ public class MapExpression {
 		this.preMapper = preMapper;
 		this.postMapper = postMapper;
 		if (expression != null) {
-			parseExpression();
+			parse();
 			if (evalInit)
 				eval();
 		}
@@ -108,10 +110,24 @@ public class MapExpression {
 	 * 
 	 * @param expression to parse
 	 * @return
-	 * @see #parseExpression()
+	 * @see #parse()
 	 */
 	public MapExpression setExpression(final String expression) {
 		this.expression = expression;
+		return this;
+	}
+
+	/**
+	 * Set delimiters for parsing (default are ${ })
+	 * 
+	 * @param beginToken (default &quot;${&quot;)
+	 * @param endToken (default &quot;}&quot;)
+	 * @return
+	 * @see #parse()
+	 */
+	public MapExpression setDelimiters(final String beginToken, final String endToken) {
+		this.beginToken = beginToken.toCharArray();
+		this.endToken = endToken.toCharArray();
 		return this;
 	}
 
@@ -156,7 +172,7 @@ public class MapExpression {
 		for (int i = 0; i < len; i++) {
 			buffer.append(evalMapToken(i));
 		}
-		mapped = buffer.toString();
+		evaled = buffer.toString();
 		return this;
 	}
 
@@ -230,7 +246,7 @@ public class MapExpression {
 	 * @see #eval()
 	 */
 	public String get() {
-		return mapped;
+		return evaled;
 	}
 
 	/**
@@ -239,7 +255,7 @@ public class MapExpression {
 	 * @return
 	 * @throws InvalidExpression if expression is wrong
 	 */
-	public MapExpression parseExpression() throws InvalidExpression {
+	public MapExpression parse() throws InvalidExpression {
 		if (expression == null)
 			throw new IllegalArgumentException();
 		if (expression.isEmpty())

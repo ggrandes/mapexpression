@@ -22,7 +22,7 @@ public class Benchmark {
 		// Benchmark Parse+Eval
 		begin = System.currentTimeMillis();
 		for (int i = 0; i < TOTAL; i++) {
-			m.parseExpression().eval().get();
+			m.parse().eval().get();
 		}
 		diff = Math.max(1, (System.currentTimeMillis() - begin));
 		System.out.println("Parse+Eval=" + diff + "ms" + " evals/ms=" + (TOTAL / diff));

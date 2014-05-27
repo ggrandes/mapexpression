@@ -15,7 +15,7 @@ public class Example2 {
 		m.setExpression(TEST_TEXT) //
 				.setPreMapper(SystemPropertyMapper.getInstance()) //
 				.setPostMapper(new MapMapper(map)) //
-				.parseExpression() //
+				.parse() //
 				.eval();
 		System.out.println(m.get());
 	}
