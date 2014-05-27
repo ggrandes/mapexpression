@@ -12,15 +12,25 @@ MapExpression is an Expression Evaluator for Java. Open Source Java project unde
 
 ```java
 import java.util.HashMap;
-
 import org.infra.mapexpression.MapExpression;
+import org.infra.mapexpression.mapper.MapMapper;
+import org.infra.mapexpression.mapper.SystemPropertyMapper;
 
-public class Example1 {
+public class Example {
 	public static void main(final String[] args) throws Throwable {
 		final String TEST_TEXT = "Hi ${user.name}, you are ${state}!!";
 		final HashMap<String, String> map = new HashMap<String, String>();
 		map.put("state", "lucky");
-		final MapExpression m = new MapExpression(TEST_TEXT, map, true);
+		// Shot
+		MapExpression m = new MapExpression(TEST_TEXT, map, true);
+		System.out.println(m.get());
+		// Fluent
+		MapExpression m = new MapExpression();
+		m.setExpression(TEST_TEXT) //
+				.setPreMapper(SystemPropertyMapper.getInstance()) //
+				.setPostMapper(new MapMapper(map)) //
+				.parseExpression() //
+				.eval();
 		System.out.println(m.get());
 	}
 }
