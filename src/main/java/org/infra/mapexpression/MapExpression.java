@@ -295,7 +295,7 @@ public class MapExpression {
 					i++;
 					continue;
 				} else {
-					tokens.add(new Token(mapTokenPre(expression.substring(last, i - endToken.length)), false));
+					tokens.add(new Token(mapTokenPre(expression.substring(last, i - endTokenLen)), false));
 					tokenBeginOrEnd = true;
 					last = i;
 					tokenPos = 0;
