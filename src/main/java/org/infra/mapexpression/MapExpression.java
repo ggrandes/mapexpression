@@ -257,36 +257,66 @@ public class MapExpression {
 	 */
 	public MapExpression parse() throws InvalidExpression {
 		if (expression == null)
-			throw new IllegalArgumentException();
+			throw new InvalidExpression("Null Expression", 0);
+		tokens.clear();
 		if (expression.isEmpty())
 			return this;
-		tokens.clear();
 		// Find all ${tag}
 		final int len = expression.length();
-		int last = 0;
-		for (int i = 0; i < len; i++) {
-			final char cbegin = expression.charAt(i);
-			if (cbegin == '$' && ((i + 1) < len)) {
-				final char cnext = expression.charAt(++i);
-				if (cnext == '{') {
-					tokens.add(new Token(expression.substring(last, i - 1), true));
-					last = i + 1;
-					for (; i < len; i++) {
-						final char cend = expression.charAt(i);
-						if (cend == '}') {
-							tokens.add(new Token(mapTokenPre(expression.substring(last, i)), false));
-							last = i + 1;
-							break;
-						}
+		final int beginTokenLen = beginToken.length;
+		final int endTokenLen = endToken.length;
+		boolean tokenBeginOrEnd = true;
+		int last = 0, tokenPos = 0;
+		for (int i = 0; i < len;) {
+			final char c = expression.charAt(i);
+			if (tokenBeginOrEnd) {
+				if (tokenPos < beginTokenLen) {
+					if (c == beginToken[tokenPos]) {
+						tokenPos++;
+					} else {
+						tokenPos = 0;
 					}
-					if ((i == len) && (last <= len))
-						throw new InvalidExpression("Not well ended expression: "
-								+ expression.substring(last - 2, len), len);
+					i++;
+					continue;
+				} else {
+					tokens.add(new Token(expression.substring(last, i - beginTokenLen), true));
+					tokenBeginOrEnd = false;
+					last = i;
+					tokenPos = 0;
+				}
+			} else {
+				if (tokenPos < endTokenLen) {
+					if (c == endToken[tokenPos]) {
+						tokenPos++;
+					} else {
+						tokenPos = 0; // Reset
+						tokenBeginOrEnd = false;
+					}
+					i++;
+					continue;
+				} else {
+					tokens.add(new Token(mapTokenPre(expression.substring(last, i - endToken.length)), false));
+					tokenBeginOrEnd = true;
+					last = i;
+					tokenPos = 0;
 				}
 			}
 		}
-		if (last < len)
-			tokens.add(new Token(expression.substring(last, len), true));
+		if (tokenBeginOrEnd) {
+			if (tokenPos == beginTokenLen) {
+				throw new InvalidExpression("Not well ended expression: " + //
+						expression.substring(last, len), len);
+			} else {
+				tokens.add(new Token(expression.substring(last, len), true));
+			}
+		} else {
+			if (tokenPos == endTokenLen) {
+				tokens.add(new Token(mapTokenPre(expression.substring(last, len - endTokenLen)), false));
+			} else {
+				throw new InvalidExpression("Not well ended expression: " + //
+						expression.substring(last, len), len);
+			}
+		}
 		return this;
 	}
 
