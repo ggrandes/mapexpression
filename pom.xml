@@ -4,7 +4,7 @@
 
 	<groupId>org.infra</groupId>
 	<artifactId>mapexpression</artifactId>
-	<version>1.0.0</version>
+	<version>1.0.1</version>
 	<description>Expression Evaluator</description>
 
 	<build>
