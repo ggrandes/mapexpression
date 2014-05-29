@@ -19,13 +19,13 @@ public class Benchmark {
 		//
 		long begin, diff;
 		System.out.println("TOTAL=" + TOTAL);
-		// Benchmark Parse+Eval
+		// Benchmark ParseOnly
 		begin = System.currentTimeMillis();
 		for (int i = 0; i < TOTAL; i++) {
-			m.parse().eval().get();
+			m.parse();
 		}
 		diff = Math.max(1, (System.currentTimeMillis() - begin));
-		System.out.println("Parse+Eval=" + diff + "ms" + " evals/ms=" + (TOTAL / diff));
+		System.out.println("ParseOnly=" + diff + "ms" + " evals/ms=" + (TOTAL / diff));
 		// Benchmark EvalOnly
 		begin = System.currentTimeMillis();
 		for (int i = 0; i < TOTAL; i++) {
@@ -33,5 +33,12 @@ public class Benchmark {
 		}
 		diff = Math.max(1, (System.currentTimeMillis() - begin));
 		System.out.println("EvalOnly=" + diff + "ms" + " evals/ms=" + (TOTAL / diff));
+		// Benchmark Parse+Eval
+		begin = System.currentTimeMillis();
+		for (int i = 0; i < TOTAL; i++) {
+			m.parse().eval().get();
+		}
+		diff = Math.max(1, (System.currentTimeMillis() - begin));
+		System.out.println("Parse+Eval=" + diff + "ms" + " evals/ms=" + (TOTAL / diff));
 	}
 }
