@@ -8,7 +8,7 @@ import org.infra.mapexpression.mapper.SystemPropertyMapper;
 
 public class Benchmark {
 	public static void main(final String[] args) throws Throwable {
-		final int TOTAL = (int) 1e6;
+		final int TOTAL = (int) 1e7;
 		final String TEST_TEXT = "Hi ${user.name}, you are ${state}!!";
 		final HashMap<String, String> map = new HashMap<String, String>();
 		map.put("state", "lucky");
