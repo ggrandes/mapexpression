@@ -18,27 +18,31 @@ public class Benchmark {
 				.setPostMapper(new MapMapper(map)); //
 		//
 		long begin, diff;
-		System.out.println("TOTAL=" + TOTAL);
+		System.out.println("TestName | Iterations | Time | Iterations/Second");
 		// Benchmark ParseOnly
 		begin = System.currentTimeMillis();
 		for (int i = 0; i < TOTAL; i++) {
 			m.parse();
 		}
 		diff = Math.max(1, (System.currentTimeMillis() - begin));
-		System.out.println("ParseOnly=" + diff + "ms" + " evals/ms=" + (TOTAL / diff));
+		System.out.println(printTest("ParseOnly", TOTAL, diff));
 		// Benchmark EvalOnly
 		begin = System.currentTimeMillis();
 		for (int i = 0; i < TOTAL; i++) {
 			m.eval().get();
 		}
 		diff = Math.max(1, (System.currentTimeMillis() - begin));
-		System.out.println("EvalOnly=" + diff + "ms" + " evals/ms=" + (TOTAL / diff));
+		System.out.println(printTest("EvalOnly", TOTAL, diff));
 		// Benchmark Parse+Eval
 		begin = System.currentTimeMillis();
 		for (int i = 0; i < TOTAL; i++) {
 			m.parse().eval().get();
 		}
 		diff = Math.max(1, (System.currentTimeMillis() - begin));
-		System.out.println("Parse+Eval=" + diff + "ms" + " evals/ms=" + (TOTAL / diff));
+		System.out.println(printTest("Parse+Eval", TOTAL, diff));
+	}
+
+	private static final String printTest(final String name, final int total, final long diff) {
+		return name + " | " + total + " | " + diff + "ms" + " | " + (total / diff * 1000);
 	}
 }

@@ -61,4 +61,17 @@ Add the dependency to your pom.xml:
     </dependency>
 
 ---
+
+## Benchmarks
+
+###### Values are not accurate, but orientative. Higher better (Iterations/Second). All test Running on Laptop { Windows 7 (64bits), sun_jdk1.6.0_45 (32bits), Dell Latitude 3330 }.
+
+TestName | Iterations | Time | Iterations/Second
+:--- | ---: | ---: | ---:
+ParseOnly | 10.000.000 | 4000ms | 2.500.000
+EvalOnly | 10.000.000 | 2911ms | 3.435.000
+Parse+Eval | 10.000.000 | 6995ms | 1.429.000
+
+
+---
 Inspired in [Java Expression Language](http://docs.oracle.com/javaee/1.4/tutorial/doc/JSPIntro7.html) and [Spring-Placeholders](http://docs.spring.io/spring/docs/4.0.4.RELEASE/javadoc-api/org/springframework/beans/factory/config/PlaceholderConfigurerSupport.html), this code is Java-minimalistic version.
