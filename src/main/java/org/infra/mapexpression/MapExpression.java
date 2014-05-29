@@ -54,7 +54,8 @@ public class MapExpression {
 	 * Create Map Expression without evaluate and SystemProperties as PostMapper
 	 * 
 	 * @param expression to map
-	 * @see #MapExpression(String, boolean)
+	 * 
+	 * @see #MapExpression(String, Mapper, Mapper, boolean)
 	 */
 	public MapExpression(final String expression) throws InvalidExpression {
 		this(expression, null, SystemPropertyMapper.getInstance(), false);
@@ -67,6 +68,8 @@ public class MapExpression {
 	 * @param postMap map for parameters
 	 * @param evalInit
 	 * @throws InvalidExpression
+	 * 
+	 * @see #MapExpression(String, Mapper, Mapper, boolean)
 	 */
 	public MapExpression(final String expression, final Map<String, String> postMap, final boolean evalInit)
 			throws InvalidExpression {
