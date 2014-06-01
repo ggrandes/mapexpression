@@ -16,9 +16,6 @@
 				<configuration>
 					<source>1.6</source>
 					<target>1.6</target>
-					<compilerArguments>
-						<endorseddirs>${endorsed.dir}</endorseddirs>
-					</compilerArguments>
 				</configuration>
 			</plugin>
 			<!-- Package Classes to JAR to upload to repo -->
@@ -29,7 +26,6 @@
 					<finalName>${project.artifactId}-${project.version}</finalName>
 					<forceCreation>true</forceCreation>
 					<archive>
-						<addMavenDescriptor>false</addMavenDescriptor>
 						<manifestEntries>
 							<Built-By>maven</Built-By>
 						</manifestEntries>
@@ -41,11 +37,11 @@
 					</excludes>
 				</configuration>
 			</plugin>
-			<!-- Package Source to JAR to upload to repo -->
+			<!-- Package source to JAR to upload to repo -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-source-plugin</artifactId>
-				<version>2.0.4</version>
+				<version>2.2.1</version>
 				<executions>
 					<execution>
 						<goals>
@@ -53,6 +49,9 @@
 						</goals>
 						<configuration>
 							<excludeResources>true</excludeResources>
+							<excludes>
+								<exclude>**/sandbox/*</exclude>
+							</excludes>
 						</configuration>
 					</execution>
 				</executions>
