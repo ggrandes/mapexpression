@@ -21,18 +21,27 @@
 					</compilerArguments>
 				</configuration>
 			</plugin>
+			<!-- Package Classes to JAR to upload to repo -->
 			<plugin>
 				<artifactId>maven-jar-plugin</artifactId>
 				<version>2.3.1</version>
 				<configuration>
 					<finalName>${project.artifactId}-${project.version}</finalName>
 					<forceCreation>true</forceCreation>
+					<archive>
+						<addMavenDescriptor>false</addMavenDescriptor>
+						<manifestEntries>
+							<Built-By>maven</Built-By>
+						</manifestEntries>
+					</archive>
 					<excludes>
+						<exclude>**/pom.properties</exclude>
 						<exclude>**/log4j.properties</exclude>
+						<exclude>**/sandbox/*</exclude>
 					</excludes>
 				</configuration>
 			</plugin>
-			<!-- Package source to JAR to upload to repo -->
+			<!-- Package Source to JAR to upload to repo -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-source-plugin</artifactId>
@@ -42,6 +51,9 @@
 						<goals>
 							<goal>jar</goal>
 						</goals>
+						<configuration>
+							<excludeResources>true</excludeResources>
+						</configuration>
 					</execution>
 				</executions>
 			</plugin>
