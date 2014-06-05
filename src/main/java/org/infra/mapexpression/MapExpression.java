@@ -243,6 +243,23 @@ public class MapExpression {
 	}
 
 	/**
+	 * Evaluate expression and invoke OutputCallback
+	 * 
+	 * @param out
+	 * @return
+	 * @throws InvalidExpression
+	 * 
+	 * @see OutputCallback#writeEvaled(String)
+	 */
+	public MapExpression eval(final OutputCallback out) throws InvalidExpression {
+		final int len = tokens.size();
+		for (int i = 0; i < len; i++) {
+			out.writeEvaled(evalMapToken(i));
+		}
+		return this;
+	}
+
+	/**
 	 * Get previous evaluated expression with {@link #eval()}
 	 * 
 	 * @return evaluated expression
