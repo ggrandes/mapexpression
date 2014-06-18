@@ -2,7 +2,7 @@
 
 MapExpression is an Expression Evaluator for Java. Open Source Java project under Apache License v2.0
 
-### Current Stable Version is [1.0.1](https://maven-release.s3.amazonaws.com/release/org/infra/mapexpression/1.0.1/mapexpression-1.0.1.jar)
+### Current Stable Version is [1.0.2](https://maven-release.s3.amazonaws.com/release/org/javastack/mapexpression/1.0.2/mapexpression-1.0.2.jar)
 
 ---
 
@@ -12,9 +12,9 @@ MapExpression is an Expression Evaluator for Java. Open Source Java project unde
 
 ```java
 import java.util.HashMap;
-import org.infra.mapexpression.MapExpression;
-import org.infra.mapexpression.mapper.MapMapper;
-import org.infra.mapexpression.mapper.SystemPropertyMapper;
+import org.javastack.mapexpression.MapExpression;
+import org.javastack.mapexpression.mapper.MapMapper;
+import org.javastack.mapexpression.mapper.SystemPropertyMapper;
 
 public class Example {
 	public static void main(final String[] args) throws Throwable {
@@ -37,7 +37,7 @@ public class Example {
 }
 ```
 
-* More examples in [Example package](https://github.com/ggrandes/mapexpression/tree/master/src/main/java/org/infra/mapexpression/example/)
+* More examples in [Example package](https://github.com/ggrandes/mapexpression/tree/master/src/main/java/org/javastack/mapexpression/example/)
 
 ---
 
@@ -55,9 +55,9 @@ Add the maven repository location to your pom.xml:
 Add the dependency to your pom.xml:
 
     <dependency>
-        <groupId>org.infra</groupId>
+        <groupId>org.javastack</groupId>
         <artifactId>mapexpression</artifactId>
-        <version>1.0.1</version>
+        <version>1.0.2</version>
     </dependency>
 
 ---

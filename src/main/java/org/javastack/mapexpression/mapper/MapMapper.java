@@ -1,4 +1,4 @@
-package org.infra.mapexpression.mapper;
+package org.javastack.mapexpression.mapper;
 
 import java.util.Map;
 

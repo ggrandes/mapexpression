@@ -1,9 +1,9 @@
-package org.infra.mapexpression.example;
+package org.javastack.mapexpression.example;
 
 import java.util.HashMap;
 
-import org.infra.mapexpression.MapExpression;
-import org.infra.mapexpression.mapper.MapMapper;
+import org.javastack.mapexpression.MapExpression;
+import org.javastack.mapexpression.mapper.MapMapper;
 
 public class Example3 {
 	public static void main(final String[] args) throws Throwable {

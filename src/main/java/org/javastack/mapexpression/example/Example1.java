@@ -1,8 +1,8 @@
-package org.infra.mapexpression.example;
+package org.javastack.mapexpression.example;
 
 import java.util.HashMap;
 
-import org.infra.mapexpression.MapExpression;
+import org.javastack.mapexpression.MapExpression;
 
 public class Example1 {
 	public static void main(final String[] args) throws Throwable {

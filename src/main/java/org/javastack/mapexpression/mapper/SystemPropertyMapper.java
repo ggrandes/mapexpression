@@ -1,4 +1,4 @@
-package org.infra.mapexpression.mapper;
+package org.javastack.mapexpression.mapper;
 
 public class SystemPropertyMapper implements Mapper {
 	private static final SystemPropertyMapper singleton = new SystemPropertyMapper();

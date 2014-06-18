@@ -1,4 +1,4 @@
-package org.infra.mapexpression;
+package org.javastack.mapexpression;
 
 import java.text.ParseException;
 

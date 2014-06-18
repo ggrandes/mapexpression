@@ -1,4 +1,4 @@
-package org.infra.mapexpression;
+package org.javastack.mapexpression;
 
 public interface OutputCallback {
 	/**

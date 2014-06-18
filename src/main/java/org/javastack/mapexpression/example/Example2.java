@@ -1,10 +1,10 @@
-package org.infra.mapexpression.example;
+package org.javastack.mapexpression.example;
 
 import java.util.HashMap;
 
-import org.infra.mapexpression.MapExpression;
-import org.infra.mapexpression.mapper.MapMapper;
-import org.infra.mapexpression.mapper.SystemPropertyMapper;
+import org.javastack.mapexpression.MapExpression;
+import org.javastack.mapexpression.mapper.MapMapper;
+import org.javastack.mapexpression.mapper.SystemPropertyMapper;
 
 public class Example2 {
 	public static void main(final String[] args) throws Throwable {

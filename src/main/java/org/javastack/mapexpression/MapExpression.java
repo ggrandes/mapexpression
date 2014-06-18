@@ -12,7 +12,7 @@
  *  limitations under the License.
  *
  */
-package org.infra.mapexpression;
+package org.javastack.mapexpression;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -22,10 +22,10 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Map;
 
-import org.infra.mapexpression.mapper.MapMapper;
-import org.infra.mapexpression.mapper.Mapper;
-import org.infra.mapexpression.mapper.MultiMapper;
-import org.infra.mapexpression.mapper.SystemPropertyMapper;
+import org.javastack.mapexpression.mapper.MapMapper;
+import org.javastack.mapexpression.mapper.Mapper;
+import org.javastack.mapexpression.mapper.MultiMapper;
+import org.javastack.mapexpression.mapper.SystemPropertyMapper;
 
 /**
  * Map Expression using System Properties, HashMap, and others
