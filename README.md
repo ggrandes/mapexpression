@@ -43,15 +43,6 @@ public class Example {
 
 ## MAVEN
 
-Add the maven repository location to your pom.xml: 
-
-    <repositories>
-        <repository>
-            <id>ggrandes-maven-s3-repo</id>
-            <url>https://maven-release.s3.amazonaws.com/release/</url>
-        </repository>
-    </repositories>
-
 Add the dependency to your pom.xml:
 
     <dependency>
