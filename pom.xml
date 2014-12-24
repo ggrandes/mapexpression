@@ -17,7 +17,8 @@
 	</licenses>
 	<developers>
 		<developer>
-			<name>ggrandes</name>
+			<id>ggrandes</id>
+			<name>Guillermo Grandes</name>
 			<email>guillermo.grandes@gmail.com</email>
 		</developer>
 	</developers>
