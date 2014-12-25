@@ -2,7 +2,7 @@
 
 MapExpression is an Expression Evaluator for Java. Open Source Java project under Apache License v2.0
 
-### Current Stable Version is [1.0.2](https://maven-release.s3.amazonaws.com/release/org/javastack/mapexpression/1.0.2/mapexpression-1.0.2.jar)
+### Current Stable Version is [1.0.2](http://search.maven.org/remotecontent?filepath=org/javastack/mapexpression/1.0.2/mapexpression-1.0.2.jar)
 
 ---
 
