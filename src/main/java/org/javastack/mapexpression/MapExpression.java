@@ -30,7 +30,7 @@ import org.javastack.mapexpression.mapper.SystemPropertyMapper;
 /**
  * Map Expression using System Properties, HashMap, and others
  * 
- * @link <a href="http://technobcn.wordpress.com/2013/09/30/java-expression-eval-system-property/">Java:
+ * @see <a href="http://technobcn.wordpress.com/2013/09/30/java-expression-eval-system-property/">Java:
  *       Expression Eval (System Property)</a>
  */
 public class MapExpression {
@@ -45,6 +45,8 @@ public class MapExpression {
 
 	/**
 	 * Create Empty Map Expression, no expression, no mappers
+	 * 
+	 * @throws InvalidExpression if expression is invalid
 	 */
 	public MapExpression() throws InvalidExpression {
 		this(null, null, null, false);
@@ -54,6 +56,7 @@ public class MapExpression {
 	 * Create Map Expression without evaluate and SystemProperties as PostMapper
 	 * 
 	 * @param expression to map
+	 * @throws InvalidExpression if expression is invalid
 	 * 
 	 * @see #MapExpression(String, Mapper, Mapper, boolean)
 	 */
@@ -66,8 +69,8 @@ public class MapExpression {
 	 * 
 	 * @param expression to map
 	 * @param postMap map for parameters
-	 * @param evalInit
-	 * @throws InvalidExpression
+	 * @param evalInit false to skip evaluation on creation
+	 * @throws InvalidExpression if expression is invalid
 	 * 
 	 * @see #MapExpression(String, Mapper, Mapper, boolean)
 	 */
@@ -84,7 +87,7 @@ public class MapExpression {
 	 * @param preMapper mapper for parameters
 	 * @param postMapper mapper for parameters
 	 * @param evalInit false to skip evaluation on creation
-	 * @throws InvalidExpression
+	 * @throws InvalidExpression if expression is invalid
 	 * @see #setPostMapper(Mapper)
 	 */
 	public MapExpression(final String expression, final Mapper preMapper, final Mapper postMapper,
@@ -112,7 +115,7 @@ public class MapExpression {
 	 * Set new Expression
 	 * 
 	 * @param expression to parse
-	 * @return
+	 * @return self
 	 * @see #parse()
 	 */
 	public MapExpression setExpression(final String expression) {
@@ -125,7 +128,7 @@ public class MapExpression {
 	 * 
 	 * @param beginToken (default &quot;${&quot;)
 	 * @param endToken (default &quot;}&quot;)
-	 * @return
+	 * @return self
 	 * @see #parse()
 	 */
 	public MapExpression setDelimiters(final String beginToken, final String endToken) {
@@ -137,8 +140,8 @@ public class MapExpression {
 	/**
 	 * Set pre mapper for parameters
 	 * 
-	 * @param postMapper
-	 * @return
+	 * @param preMapper used for mapping on {@link #parse()}
+	 * @return self
 	 */
 	public MapExpression setPreMapper(final Mapper preMapper) {
 		this.preMapper = preMapper;
@@ -148,24 +151,25 @@ public class MapExpression {
 	/**
 	 * Set post mapper for parameters
 	 * 
-	 * @param postMapper
-	 * @return
+	 * @param postMapper used for mapping on {@link #eval()}
+	 * @return self
 	 */
 	public MapExpression setPostMapper(final Mapper postMapper) {
 		this.postMapper = postMapper;
 		return this;
 	}
 
-	private final String evalMapToken(final int token) throws InvalidExpression {
+	private final String evalMapToken(final int token, final Mapper finalMapper) throws InvalidExpression {
 		final Token tok = tokens.get(token);
-		return tok.isString ? tok.token : mapTokenPost(tok.token);
+		return tok.isString ? tok.token : mapTokenPost(tok.token, finalMapper);
 	}
 
 	/**
 	 * Force reevaluate expression (if system property is changed after MapExpression was created) and store
 	 * for {@link #get()}
 	 * 
-	 * @throws InvalidExpression
+	 * @return self
+	 * @throws InvalidExpression if expression is invalid
 	 * @see #get()
 	 * @threadSafe false
 	 */
@@ -173,7 +177,7 @@ public class MapExpression {
 		buffer.setLength(0);
 		final int len = tokens.size();
 		for (int i = 0; i < len; i++) {
-			buffer.append(evalMapToken(i));
+			buffer.append(evalMapToken(i, null));
 		}
 		evaled = buffer.toString();
 		return this;
@@ -182,17 +186,32 @@ public class MapExpression {
 	/**
 	 * Evaluate expression and write to OutputStream using specified Charset
 	 * 
-	 * @param out
-	 * @param charset
-	 * @return
-	 * @throws InvalidExpression
-	 * @throws IOException
+	 * @param out destination
+	 * @param charset used for encoding
+	 * @return self
+	 * @throws InvalidExpression if expression is invalid
+	 * @throws IOException if io fail
 	 */
 	public MapExpression eval(final OutputStream out, final Charset charset) throws InvalidExpression,
 			IOException {
+		return eval(out, charset, (Mapper) null);
+	}
+
+	/**
+	 * Evaluate expression and write to OutputStream using specified Charset using <code>finalMapper</code> as postMapper
+	 * 
+	 * @param out destination
+	 * @param charset used for encoding
+	 * @param finalMapper used instead of postMapper
+	 * @return self
+	 * @throws InvalidExpression if expression is invalid
+	 * @throws IOException if io fail
+	 */
+	public MapExpression eval(final OutputStream out, final Charset charset, final Mapper finalMapper) throws InvalidExpression,
+			IOException {
 		final int len = tokens.size();
 		for (int i = 0; i < len; i++) {
-			out.write(evalMapToken(i).getBytes(charset));
+			out.write(evalMapToken(i, finalMapper).getBytes(charset));
 		}
 		return this;
 	}
@@ -200,14 +219,26 @@ public class MapExpression {
 	/**
 	 * Evaluate expression and write to PrintWriter
 	 * 
-	 * @param out
-	 * @return
-	 * @throws InvalidExpression
+	 * @param out destination
+	 * @return self
+	 * @throws InvalidExpression if expression is invalid
 	 */
 	public MapExpression eval(final PrintWriter out) throws InvalidExpression {
+		return eval(out, (Mapper) null);
+	}
+
+	/**
+	 * Evaluate expression and write to PrintWriter using <code>finalMapper</code> as postMapper
+	 * 
+	 * @param out destination
+	 * @param finalMapper used instead of postMapper
+	 * @return self
+	 * @throws InvalidExpression if expression is invalid
+	 */
+	public MapExpression eval(final PrintWriter out, final Mapper finalMapper) throws InvalidExpression {
 		final int len = tokens.size();
 		for (int i = 0; i < len; i++) {
-			out.print(evalMapToken(i));
+			out.print(evalMapToken(i, finalMapper));
 		}
 		return this;
 	}
@@ -215,14 +246,26 @@ public class MapExpression {
 	/**
 	 * Evaluate expression and write to PrintStream
 	 * 
-	 * @param out
-	 * @return
-	 * @throws InvalidExpression
+	 * @param out destination
+	 * @return self
+	 * @throws InvalidExpression if expression is invalid
 	 */
 	public MapExpression eval(final PrintStream out) throws InvalidExpression {
+		return eval(out, (Mapper) null);
+	}
+
+	/**
+	 * Evaluate expression and write to PrintStream using <code>finalMapper</code> as postMapper
+	 * 
+	 * @param out destination
+	 * @param finalMapper used instead of postMapper
+	 * @return self
+	 * @throws InvalidExpression if expression is invalid
+	 */
+	public MapExpression eval(final PrintStream out, final Mapper finalMapper) throws InvalidExpression {
 		final int len = tokens.size();
 		for (int i = 0; i < len; i++) {
-			out.print(evalMapToken(i));
+			out.print(evalMapToken(i, finalMapper));
 		}
 		return this;
 	}
@@ -230,14 +273,26 @@ public class MapExpression {
 	/**
 	 * Evaluate expression and write to StringBuilder
 	 * 
-	 * @param out
-	 * @return
-	 * @throws InvalidExpression
+	 * @param out destination
+	 * @return self
+	 * @throws InvalidExpression if expression is invalid
 	 */
 	public MapExpression eval(final StringBuilder out) throws InvalidExpression {
+		return eval(out, (Mapper) null);
+	}
+
+	/**
+	 * Evaluate expression and write to StringBuilder using <code>finalMapper</code> as postMapper
+	 * 
+	 * @param out destination
+	 * @param finalMapper used instead of postMapper
+	 * @return self
+	 * @throws InvalidExpression if expression is invalid
+	 */
+	public MapExpression eval(final StringBuilder out, final Mapper finalMapper) throws InvalidExpression {
 		final int len = tokens.size();
 		for (int i = 0; i < len; i++) {
-			out.append(evalMapToken(i));
+			out.append(evalMapToken(i, finalMapper));
 		}
 		return this;
 	}
@@ -245,16 +300,30 @@ public class MapExpression {
 	/**
 	 * Evaluate expression and invoke OutputCallback
 	 * 
-	 * @param out
-	 * @return
-	 * @throws InvalidExpression
+	 * @param out destination
+	 * @return self
+	 * @throws InvalidExpression if expression is invalid
 	 * 
 	 * @see OutputCallback#writeEvaled(String)
 	 */
 	public MapExpression eval(final OutputCallback out) throws InvalidExpression {
+		return eval(out, (Mapper) null);
+	}
+
+	/**
+	 * Evaluate expression and invoke OutputCallback using <code>finalMapper</code> as postMapper
+	 * 
+	 * @param out destination
+	 * @param finalMapper used instead of postMapper
+	 * @return self
+	 * @throws InvalidExpression if expression is invalid
+	 * 
+	 * @see OutputCallback#writeEvaled(String)
+	 */
+	public MapExpression eval(final OutputCallback out, final Mapper finalMapper) throws InvalidExpression {
 		final int len = tokens.size();
 		for (int i = 0; i < len; i++) {
-			out.writeEvaled(evalMapToken(i));
+			out.writeEvaled(evalMapToken(i, finalMapper));
 		}
 		return this;
 	}
@@ -272,7 +341,7 @@ public class MapExpression {
 	/**
 	 * Parse expression
 	 * 
-	 * @return
+	 * @return self
 	 * @throws InvalidExpression if expression is wrong
 	 */
 	public MapExpression parse() throws InvalidExpression {
@@ -359,17 +428,20 @@ public class MapExpression {
 	}
 
 	/**
-	 * Map Token Post parse (when eval() is called)
+	 * Map Token Post parse (when eval() is called) using <code>finalMapper</code> as postMapper
 	 * 
 	 * @param name
 	 * @return value or name if not found
 	 * @throws InvalidExpression if expression is wrong
 	 */
-	private final String mapTokenPost(final String name) throws InvalidExpression {
+	private final String mapTokenPost(final String name, Mapper finalMapper) throws InvalidExpression {
 		if (name.isEmpty())
 			throw new InvalidExpression("Invalid name (empty)", 0);
-		if (postMapper != null) {
-			final String value = postMapper.map(name);
+		if (finalMapper == null) {
+			finalMapper = this.postMapper;
+		}
+		if (finalMapper != null) {
+			final String value = finalMapper.map(name);
 			if (value != null)
 				return value;
 		}

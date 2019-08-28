@@ -4,7 +4,7 @@ public interface OutputCallback {
 	/**
 	 * Write Evaled Data
 	 * 
-	 * @param data
+	 * @param data to write
 	 */
 	void writeEvaled(final String data);
 }

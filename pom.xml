@@ -4,7 +4,7 @@
 
 	<groupId>org.javastack</groupId>
 	<artifactId>mapexpression</artifactId>
-	<version>1.0.2</version>
+	<version>1.0.3</version>
 	<description>Expression Evaluator</description>
 
 	<name>${project.groupId}:${project.artifactId}</name>

@@ -2,7 +2,7 @@
 
 MapExpression is an Expression Evaluator for Java. Open Source Java project under Apache License v2.0
 
-### Current Stable Version is [1.0.2](https://search.maven.org/#search|ga|1|g%3Aorg.javastack%20a%3Amapexpression)
+### Current Stable Version is [1.0.3](https://search.maven.org/#search|ga|1|g%3Aorg.javastack%20a%3Amapexpression)
 
 ---
 
@@ -30,7 +30,7 @@ public class Example {
 		m.setExpression(TEST_TEXT) //
 				.setPreMapper(SystemPropertyMapper.getInstance()) //
 				.setPostMapper(new MapMapper(map)) //
-				.parseExpression() //
+				.parse() //
 				.eval();
 		System.out.println(m.get());
 	}
@@ -48,7 +48,7 @@ Add the dependency to your pom.xml:
     <dependency>
         <groupId>org.javastack</groupId>
         <artifactId>mapexpression</artifactId>
-        <version>1.0.2</version>
+        <version>1.0.3</version>
     </dependency>
 
 ---
